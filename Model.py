@@ -58,7 +58,7 @@ model.add(Convolution2D(filters=random.randint(30,60),
                         activation='relu',
                         input_shape=(100,100,3)
                        ))
-model.add(MaxPool2D(pool_size=random.choice(((2,2),(3,3),(4,4),(5,5),(6,6))),border_mode='same'))
+model.add(MaxPool2D(pool_size=random.choice(((2,2),(3,3),(4,4),(5,5),(6,6)))))
 
 
 # In[9]:
@@ -128,10 +128,9 @@ architecture(random.randint(1,4))
 
 model.add(Convolution2D(filters=random.randint(30,60),
                         kernel_size=random.choice(((2,2),(3,3),(4,4),(5,5),(6,6))),
-                        activation='relu',
-                        border_mode='same'
+                        activation='relu'
                        ))
-model.add(MaxPool2D(pool_size=random.choice(((2,2),(3,3),(4,4),(5,5),(6,6))),border_mode='same'))
+model.add(MaxPool2D(pool_size=random.choice(((2,2),(3,3),(4,4),(5,5),(6,6)))))
 
 
 # In[12]:
@@ -198,7 +197,7 @@ print(model.summary())
 # In[18]:
 
 
-model.compile(optimizer=random.choice((RMSprop(lr=.001),Adam(lr=.0001),SGD(lr=.001),Nadam(lr=.001),Adamax(lr=.001))),loss='binary_crossentropy',metrics=['accuracy'])
+model.compile(optimizer=random.choice((RMSprop(lr=.0001),Adam(lr=.0001),SGD(lr=.001),Nadam(lr=.001),Adamax(lr=.001))),loss='binary_crossentropy',metrics=['accuracy'])
 
 
 # ###  Train Model
@@ -235,8 +234,8 @@ validation_generator = test_datagen.flow_from_directory(
 
 out = model.fit(
         train_generator,
-        steps_per_epoch=50,
-        epochs=1,
+        steps_per_epoch=100,
+        epochs=random.randint(1,50),
         validation_data=validation_generator,
         validation_steps=28)
 
@@ -250,20 +249,20 @@ out.history
 # In[64]:
 
 
-print(out.history['val_accuracy'][0])
+print(out.history['accuracy'][0])
 
 
 # In[62]:
 
 
 mod =str(model.layers)
-accuracy = str(out.history['val_accuracy'][0])
+accuracy = str(out.history['accuracy'][0])
 
 
 # In[61]:
 
 
-if out.history['val_accuracy'][0] >= .80:
+if out.history['accuracy'][0] >= .75:
     import smtplib
     # creates SMTP session 
     s = smtplib.SMTP('smtp.gmail.com', 587)
@@ -285,4 +284,3 @@ if out.history['val_accuracy'][0] >= .80:
 
     # terminating the session 
     s.quit()
-
